@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Windows.Forms;
 
 namespace GUI_08_Factorial
@@ -11,15 +12,25 @@ namespace GUI_08_Factorial
             InitializeComponent();
         }
 
-        private int calculatePrimes(int n)
+        private bool IsPrime(int n)
         {
-            var fact = 1;
-            for (var i = 2; i <= n; i++)
+            for (int i = 3; i <= Math.Sqrt(n); i += 2)
             {
-                fact *= i;
+                if (n % i == 0) return false;
             }
 
-            return fact;
+            return true;
+        }
+
+        private ArrayList CalculatePrimes(int n)
+        {
+            ArrayList primes = new ArrayList();
+            for (var i = 3; i <= n; i+=2)
+            {
+                if (IsPrime(i)) primes.Add(i);
+            }
+
+            return primes;
         }
 
         private void buttonCalculate_Click(object sender, EventArgs e)
@@ -27,7 +38,11 @@ namespace GUI_08_Factorial
             try
             {
                 _input = int.Parse(textBoxInputFactorial.Text);
-                labelResult.Text = calculatePrimes(_input).ToString();
+                foreach (var n in CalculatePrimes(_input))
+                {
+                    textBoxResult.Text += n + " ";
+                }
+                
             }
             catch (Exception)
             {
